@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMK Unpack Web</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>🎵 EMK Unpack Web</h1>
+      <p>แกะไฟล์ EMK และดาวน์โหลดเป็น ZIP ได้ง่ายๆ</p>
+    </header>
+    
+    <div class="stats" id="stats">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3 id="filesCount">0</h3>
+          <p>ไฟล์ที่เลือก</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="extractedCount">0</h3>
+          <p>ไฟล์ที่แกะแล้ว</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="totalSize">0 KB</h3>
+          <p>ขนาดรวม</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-section">
+      <div class="file-drop-zone" id="dropZone">
+        <input type="file" id="fileInput" class="file-input" multiple accept=".emk" />
+        <div class="drop-zone-content">
+          <div class="drop-icon">📁</div>
+          <h3>เลือกไฟล์ EMK หรือลากมาวางที่นี่</h3>
+          <p>รองรับหลายไฟล์พร้อมกัน</p>
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+      
+      <div class="controls">
+        <button class="btn btn-primary" id="unpackBtn" disabled>
+          <span>🚀</span> เริ่มแกะไฟล์
+        </button>
+        <button class="btn btn-secondary" id="clearBtn">
+          <span>🗑️</span> ล้างทั้งหมด
+        </button>
+      </div>
+    </div>
+
+    <div class="progress-section" id="progressSection">
+      <h3>🔄 กำลังประมวลผล...</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p id="progressText">เตรียมการ...</p>
+    </div>
+
+    <div class="log-section" id="logSection">
+      <h3>📋 รายการประมวลผล</h3>
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="files-section" id="filesSection">
+      <div class="files-header">
+        <h3>📦 ไฟล์ที่แกะแล้ว</h3>
+        <button class="btn btn-success" id="downloadAllBtn" disabled>
+          <span>💾</span> ดาวน์โหลดทั้งหมดเป็น ZIP
+        </button>
+      </div>
+      <div class="files-grid" id="filesGrid"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
