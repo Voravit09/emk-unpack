@@ -1,43 +1,31 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy Static HTML to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+    branches:
+      - main   # เมื่อ push มาที่ main branch ของ repo
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # 1️⃣ Checkout repo ต้นทาง (สมมติคุณเอาไฟล์ไว้ในโฟลเดอร์ source/)
+      - name: Checkout source
+        uses: actions/checkout@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: source
+
+      # 2️⃣ Copy static files (ถ้าอยู่ใน source/)
+      - name: Copy static files
+        run: |
+          mkdir -p site
+          cp -r source/* site/
+
+      # 3️⃣ Deploy ไป GitHub Pages
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site       # โฟลเดอร์ที่ต้องการ deploy
+          publish_branch: main      # branch ที่ GitHub Pages ใช้
